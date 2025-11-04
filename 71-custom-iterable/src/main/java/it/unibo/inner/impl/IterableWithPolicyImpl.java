@@ -2,26 +2,48 @@ package it.unibo.inner.impl;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+
 
 import it.unibo.inner.api.IterableWithPolicy;
+import it.unibo.inner.api.Predicate;
 
 public class IterableWithPolicyImpl<T> implements IterableWithPolicy<T> {
-    private ArrayList<T> elems = new ArrayList<>();
+    private ArrayList<T> elems;
 
     
-    public IterableWithPolicyImpl(final ArrayList<T> elems) {
+    public IterableWithPolicyImpl(final T[] elementsToAdd) {
+        this.elems = new ArrayList<>();
+        for (final T elem : elementsToAdd) {
+            this.elems.add(elem);
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayIterator();
+    }
+
+    @Override
+    public void setIterationPolicy(Predicate<T> filter) {
 
     }
 
-    private class IteratorWithPolicy implements Iterator<T> {
-        public T next() {
-            final T elem = IterableWithPolicyImpl.this.elems.getFirst();
-            IterableWithPolicyImpl.this.elems.
+    public String toString() {
+        return "[IterableWithPolicy]: " + this.elems.toString();
+    }
+
+    private class ArrayIterator implements Iterator<T> {
+        private int index;
+
+        @Override
+        public boolean hasNext() {
+            return index < elems.size();
         }
 
-        public boolean hasNext() {
-            return (IterableWithPolicyImpl.this.elems != null);
+        @Override
+        public T next() {
+            return elems.get(index++);
         }
+
     }
 }
