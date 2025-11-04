@@ -12,14 +12,7 @@ public class IterableWithPolicyImpl<T> implements IterableWithPolicy<T> {
     private Predicate<T> predicate;
 
     public IterableWithPolicyImpl(final T[] elementsToAdd) {
-        this(elementsToAdd, new Predicate<T>() {
-
-            @Override
-            public boolean test(T elem) {
-                return true;
-            }
-
-        });
+        this(elementsToAdd, new PredicateImpl<>());
     }
 
     public IterableWithPolicyImpl(final T[] elementsToAdd, final Predicate<T> predicate) {
@@ -63,6 +56,15 @@ public class IterableWithPolicyImpl<T> implements IterableWithPolicy<T> {
                 throw new NoSuchElementException();
             }
             return elems.get(index++);
+        }
+
+    }
+
+    private static class PredicateImpl<T> implements Predicate<T> {
+
+        @Override
+        public boolean test(T elem) {
+            return true;
         }
 
     }
